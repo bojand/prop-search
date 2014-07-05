@@ -1,0 +1,27 @@
+{
+  "name": "prop-search",
+  "version": "0.1.0",
+  "description": "Simple property searches on your JavaScript objects.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bojand/prop-search.git"
+  },
+  "homepage": "https://github.com/bojand/prop-search",
+  "keywords": [
+    "object",
+    "property",
+    "search"
+  ],
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": {
+    "name": "Bojan D.",
+    "email": "dbojan@gmail.com"
+  },
+  "license": "MIT"
+}

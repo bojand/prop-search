@@ -1,0 +1,11 @@
+# From .gitignore
+node_modules
+temp
+.tmp/
+tmp
+.idea
+.orig
+dump.rdb
+
+# Additions for .npmignore only
+/.npmignore
