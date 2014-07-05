@@ -43,14 +43,20 @@ function objectSearch(obj, test, path, ret) {
 }
 
 /**
- * Reduces the resulting paths in the result arrays if needed and specified in options.
+ * Joins the resulting paths in the result arrays if needed and specified in options.
  *
  * @api private
  * @param res
  * @param options
  */
-function reducePaths(res, options) {
+function joinPaths(res, options) {
+  if (res && res.length > 0 && typeof options.separator === 'string') {
+    res.forEach(function (elem) {
+      elem.path = elem.path.join(options.separator);
+    });
+  }
 
+  return res;
 }
 
 /**
@@ -64,7 +70,7 @@ function reducePaths(res, options) {
  * @returns {Array}
  */
 exports.search = function (obj, test, options) {
-  return objectSearch(obj, test);
+  return joinPaths(objectSearch(obj, test), options);
 };
 
 /**
@@ -76,16 +82,20 @@ exports.search = function (obj, test, options) {
  * @param {String|Array} query  The property key(s) to check.
  *                              It can be array, then searches for any one of the items in array.
  * @param {Boolean} val     <optional> what boolean value to search for. default is true
- * @returns {*}
+ * @returns {Array}
  */
 exports.searchForBoolean = function (obj, options, query, val) {
-  if (val === undefined) {
-    val = query;
+  if (val === undefined && query === undefined) {
+    val = true;
     query = options;
     options = {};
   }
-
-  if (typeof val !== 'boolean') {
+  else if (val === undefined && typeof query === 'boolean') {
+    val = query;
+    query = options;
+    options = {}
+  }
+  else {
     val = true;
   }
 
@@ -109,7 +119,7 @@ exports.searchForBoolean = function (obj, options, query, val) {
     return false;
   };
 
-  return objectSearch(obj, test);
+  return joinPaths(objectSearch(obj, test), options);
 };
 
 /**
@@ -147,7 +157,7 @@ exports.searchForExistence = function (obj, options, query) {
     return false;
   };
 
-  return objectSearch(obj, test);
+  return joinPaths(objectSearch(obj, test), options);
 };
 
 /**
@@ -191,5 +201,5 @@ exports.searchForText = function (obj, options, query) {
     return false;
   };
 
-  return objectSearch(obj, test);
+  return joinPaths(objectSearch(obj, test), options);
 };

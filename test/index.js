@@ -56,9 +56,9 @@ describe("prop-search", function () {
 
   describe("searchForBoolean", function () {
     it("should find boolean values when just given the property name", function () {
-      var ret = ps.searchForBoolean(testObj, 'index');
+      var res = ps.searchForBoolean(testObj, 'index');
 
-      assert.equal(ret.length, 3, 'incorrect number of results.');
+      assert.equal(res.length, 3, 'incorrect number of results.');
     });
   });
 
