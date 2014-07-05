@@ -73,20 +73,19 @@ exports.search = function (obj, test, options) {
  * @api public
  * @param {Mixed} obj       input
  * @param {Mixed} options   <optional> options
- * @param {Boolean} val     <optional> what boolean value to search for. default is true
  * @param {String|Array} query  The property key(s) to check.
  *                              It can be array, then searches for any one of the items in array.
+ * @param {Boolean} val     <optional> what boolean value to search for. default is true
  * @returns {*}
  */
-exports.searchForBoolean = function (obj, options, val, query) {
-  if (!query) {
-    query = val;
-    val = options;
+exports.searchForBoolean = function (obj, options, query, val) {
+  if (val === undefined) {
+    val = query;
+    query = options;
     options = {};
   }
 
-  if (query === undefined) {
-    query = val;
+  if (typeof val !== 'boolean') {
     val = true;
   }
 
