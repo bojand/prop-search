@@ -112,6 +112,15 @@ exports.searchForBoolean = function (obj, options, query, val) {
   return objectSearch(obj, test);
 };
 
+/**
+ * Searches of existence of properties for the given property key(s)
+ *
+ * @api public
+ * @param {Mixed} obj
+ * @param {Mixed} options   <optional> options
+ * @param {String|Array}query
+ * @returns {Array}
+ */
 exports.searchForExistence = function (obj, options, query) {
   if (!query) {
     query = options;
