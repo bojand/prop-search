@@ -4,14 +4,14 @@ Simple property searches on your JavaScript objects.
 
 ## Installation
 
-`npm install mailgun-js`
+`npm install prop-search`
 
 ## Usage overview
 
 Helper module to search an object for properties and conditions, and returns the array of results.
 We can search for specific boolean values by key and optionally value. We can search for existence of keys, or perform
 a text search, and find results with the text value. Finally we can search using a test function.
-The function returns an array of result objects, which have the format:
+All functions returns an array of result objects, which have the format:
 
 ```js
 {
@@ -145,7 +145,7 @@ var res = ps.searchForText(obj, 'blah');
 #### search(obj, test, options)
 
 Searches the object using the `test` function. `test` iterator function accepts a parameter `obj` which is an object
-as the search object is iterated. Test the object for whatever condition. The function has to return true or false.
+as the search object is iterated. Test the object for whatever condition. The function has to return `true` or `false`.
 
 * `obj`     - The object to search
 * `test`    - The iterator test function.
