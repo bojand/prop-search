@@ -32,7 +32,7 @@ function objectSearch(obj, parent, test, path, ret) {
 
   if (test(obj)) {
     var p = path;
-    var key = path[path.length - 1];
+    var objkey = path[path.length - 1];
     var val = obj;
 
     // in case it's an array
@@ -42,18 +42,18 @@ function objectSearch(obj, parent, test, path, ret) {
     else if (!isPlainObject(obj) && isPlainObject(parent)) {
       // or primitive
       val = parent;
-      path.pop();
-      key = path[path.length - 1];
+      p = p.slice(0, -1);
+      objkey = p[p.length - 1];
     }
 
     ret.push({
       path: p,
       value: val,
-      key: key
+      key: objkey
     });
   }
 
-  for (key in obj) {
+  for (var key in obj) {
     if (obj.hasOwnProperty(key) && isPlainObject(obj[key])) {
       var curr = obj[key];
       if (Array.isArray(curr)) {
@@ -198,8 +198,9 @@ exports.searchForExistence = function (obj, query, options) {
 };
 
 /**
- * Searches the object for any properties whose value matches the query string.
- * If query is an array, matches any of the strings in the array.
+ * Searches the object for any properties whose value matches the query string or number.
+ * Only works for strings or numbers.
+ * If query is an array, matches any of the strings / numbers in the array.
  *
  * @api public
  * @param {Mixed} obj
@@ -207,7 +208,7 @@ exports.searchForExistence = function (obj, query, options) {
  * @param {String|Array} query the text to match
  * @returns {Array}
  */
-exports.searchForText = function (obj, query, options) {
+exports.searchForValue = function (object, query, options) {
   if (!options) {
     options = {};
   }
@@ -217,11 +218,11 @@ exports.searchForText = function (obj, query, options) {
       if (Array.isArray(obj) && obj.length > 0) {
         return obj.indexOf(query) >= 0;
       }
-      else if (typeof obj === 'string') {
+      else if (typeof obj === 'string' || typeof obj === 'number') {
         return obj === query;
       }
       else {
-        for (key in obj) {
+        for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
             return obj[key] === query;
           }
@@ -232,18 +233,18 @@ exports.searchForText = function (obj, query, options) {
     return false;
   };
 
-  var test = function test(obj) {
-    if (typeof query === 'string') {
-      return testObj(obj, query);
+  var test = function test(currobj) {
+    if (typeof query === 'string' || typeof query === 'number') {
+      return testObj(currobj, query);
     }
     else if (Array.isArray(query)) {
       for (var i = 0; i < query.length; i++) {
-        if (testObj(obj, query[i])) return true;
+        if (testObj(currobj, query[i])) return true;
       }
     }
 
     return false;
   };
 
-  return joinPaths(objectSearch(obj, test), options);
+  return joinPaths(objectSearch(object, test), options);
 };

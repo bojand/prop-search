@@ -47,6 +47,59 @@ Output:
 }]
 ```
 
+Should work with array properties:
+
+```js
+var thing = {
+  something: {
+    otherthing: {
+      something: [
+        {
+          something: true
+        },
+        {
+          other: false
+        }
+      ]
+    }
+  }
+};
+
+var res = ps.searchForBoolean(thing, 'something');
+```
+`res`:
+```js
+[
+  { path: [ 'something', 'otherthing', 'something' ],
+    value: [
+      { something: true },
+      { other: false }
+    ],
+    key: 'something' }
+]
+```
+Or for example:
+```js
+var thing = {
+  something: {
+    other: {
+      something: [ 'val1', 'val2', 'val3' ]
+    }
+  }
+};
+
+var res = ps.searchForValue(thing, 'val2');
+```
+`res`:
+```js
+[
+  { path: [ 'something', 'other', 'something' ],
+    value: [ 'val1', 'val2', 'val3' ],
+    key: 'something'
+  }
+]
+```
+
 ## API
 
 #### searchForBoolean(obj, query, options, value)
@@ -112,12 +165,12 @@ var res = ps.searchForExistence(obj, 'other');
     key: 'something' } ]
 ```
 
-#### searchForText(obj, query, options)
+#### searchForValue(obj, query, options)
 
-Searches for text if they exist in the object.
+Searches for numerical or text value if they exist in the object.
 
 * `obj`     - The object to search
-* `query`   - The text string(s) to search in the object. It can be a string or an array of strings.
+* `query`   - The text string(s) or number(s) to search in the object. It can be a single value or an array of values.
 * `options` - Optionally specify the `separator` string to be used to do `join` on the `path` in the results.
 
 ```js
@@ -133,7 +186,7 @@ var obj = {
   }
 };
 
-var res = ps.searchForText(obj, 'blah');
+var res = ps.searchForValue(obj, 'blah');
 ```
 `res`:
 ```js
@@ -168,7 +221,7 @@ var tester = function (testObj) {
   return testObj.other === 'blah';
 };
 
-var res = ps.searchForText(obj, tester, {separator: '.'});
+var res = ps.search(obj, tester, {separator: '.'});
 ```
 `res`:
 ```js

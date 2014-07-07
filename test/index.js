@@ -38,6 +38,12 @@ describe("prop-search", function () {
           val1: 'good'
         }
       }
+    },
+
+    propG: {
+      objB: {
+        someNumValue: 5
+      }
     }
 
   };
@@ -73,6 +79,14 @@ describe("prop-search", function () {
     something: {
       other: {
         something: [ 'val1', 'val2', 'val3' ]
+      }
+    }
+  };
+
+  var testObj5 = {
+    something: {
+      other: {
+        something: [ 'val1', 11, 'val3' ]
       }
     }
   };
@@ -251,7 +265,7 @@ describe("prop-search", function () {
     });
   });
 
-  describe("searchForText", function () {
+  describe("searchForValue", function () {
     it('should work with no option set', function () {
       var expected = [
         { path: [ 'propF', 'moreNester' ],
@@ -262,7 +276,21 @@ describe("prop-search", function () {
           key: 'moreNester' }
       ];
 
-      var actual = ps.searchForText(testObj, 'tre');
+      var actual = ps.searchForValue(testObj, 'tre');
+
+      assert.equal(actual.length, expected.length, 'incorrect number of results.');
+      assert.deepEqual(actual, expected, 'incorrect results');
+    });
+
+    it('should work with no option set with a number', function () {
+      var expected = [
+        { path: [ 'propG', 'objB' ],
+          value: { someNumValue: 5 },
+          key: 'objB'
+        }
+      ];
+
+      var actual = ps.searchForValue(testObj, 5);
 
       assert.equal(actual.length, expected.length, 'incorrect number of results.');
       assert.deepEqual(actual, expected, 'incorrect results');
@@ -278,18 +306,32 @@ describe("prop-search", function () {
           key: 'more' }
       ];
 
-      var actual = ps.searchForText(testObj, 'here', {separator: '.' });
+      var actual = ps.searchForValue(testObj, 'here', {separator: '.' });
 
       assert.equal(actual.length, expected.length, 'incorrect number of results.');
       assert.deepEqual(actual, expected, 'incorrect results');
     });
 
-    it('should work with arrays', function () {
-      var res = ps.searchForText(testObj4, 'val2');
+    it('should work with arrays and text', function () {
+      var res = ps.searchForValue(testObj4, 'val2');
 
       var expected = [
         { path: [ 'something', 'other', 'something' ],
           value: [ 'val1', 'val2', 'val3' ],
+          key: 'something'
+        }
+      ];
+
+      assert.equal(res.length, expected.length, 'incorrect number of results.');
+      assert.deepEqual(res, expected, 'incorrect results');
+    });
+
+    it('should work with arrays and number', function () {
+      var res = ps.searchForValue(testObj5, 11);
+
+      var expected = [
+        { path: [ 'something', 'other', 'something' ],
+          value: [ 'val1', 11, 'val3' ],
           key: 'something'
         }
       ];
