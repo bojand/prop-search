@@ -1,6 +1,6 @@
 {
   "name": "prop-search",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Simple property searches on your JavaScript objects.",
   "main": "index.js",
   "repository": {

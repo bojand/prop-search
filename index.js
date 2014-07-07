@@ -33,16 +33,17 @@ function objectSearch(obj, parent, test, path, ret) {
   if (test(obj)) {
     var p = path;
     var key = path[path.length - 1];
+    var val = obj;
+
+    // in case it's an array
     if (parent && Array.isArray(parent)) {
       val = parent;
     }
     else if (!isPlainObject(obj) && isPlainObject(parent)) {
+      // or primitive
       val = parent;
       path.pop();
       key = path[path.length - 1];
-    }
-    else {
-      var val = obj;
     }
 
     ret.push({
@@ -121,7 +122,7 @@ exports.searchForBoolean = function (obj, query, options, val) {
   }
   else if (val === undefined && typeof options === 'boolean') {
     val = options;
-    options = {}
+    options = {};
   }
   else if (val === undefined) {
     val = true;
