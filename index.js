@@ -6,7 +6,7 @@
  * @returns {Boolean}
  */
 function isPlainObject(input) {
-  if (input !== null && typeof input === 'object' && input.constructor === Object) return true;
+  if (input !== null && typeof input === 'object') return true;
   else return false;
 }
 
@@ -21,21 +21,48 @@ function isPlainObject(input) {
  * @param {Array} ret       current results
  * @returns {Array}
  */
-function objectSearch(obj, test, path, ret) {
-  if (path === void 0) { path = [] }
+function objectSearch(obj, parent, test, path, ret) {
+  if (typeof parent === 'function') {
+    test = parent;
+    parent = null;
+  }
+
+  if (!path) { path = [] }
   if (!ret) ret = [];
 
   if (test(obj)) {
+    var p = path;
+    var key = path[path.length - 1];
+    if (parent && Array.isArray(parent)) {
+      val = parent;
+    }
+    else if (!isPlainObject(obj) && isPlainObject(parent)) {
+      val = parent;
+      path.pop();
+      key = path[path.length - 1];
+    }
+    else {
+      var val = obj;
+    }
+
     ret.push({
-      path: path,
-      value: obj,
-      key: path[path.length - 1]
+      path: p,
+      value: val,
+      key: key
     });
   }
 
   for (key in obj) {
     if (obj.hasOwnProperty(key) && isPlainObject(obj[key])) {
-      objectSearch(obj[key], test, path.concat(key), ret)
+      var curr = obj[key];
+      if (Array.isArray(curr)) {
+        curr.forEach(function (elem) {
+          objectSearch(elem, curr, test, path.concat(key), ret)
+        });
+      }
+      else {
+        objectSearch(curr, curr, test, path.concat(key), ret)
+      }
     }
   }
 
@@ -185,10 +212,18 @@ exports.searchForText = function (obj, query, options) {
   }
 
   var testObj = function (obj, query) {
-    if (obj && isPlainObject(obj)) {
-      for (key in obj) {
-        if (obj.hasOwnProperty(key)) {
-          return obj[key] === query;
+    if (obj) {
+      if (Array.isArray(obj) && obj.length > 0) {
+        return obj.indexOf(query) >= 0;
+      }
+      else if (typeof obj === 'string') {
+        return obj === query;
+      }
+      else {
+        for (key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            return obj[key] === query;
+          }
         }
       }
     }

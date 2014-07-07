@@ -54,6 +54,29 @@ describe("prop-search", function () {
     }
   };
 
+  var testObj3 = {
+    something: {
+      otherthing: {
+        something: [
+          {
+            something: true
+          },
+          {
+            other: false
+          }
+        ]
+      }
+    }
+  };
+
+  var testObj4 = {
+    something: {
+      other: {
+        something: [ 'val1', 'val2', 'val3' ]
+      }
+    }
+  };
+
   describe("searchForBoolean", function () {
     it("should find boolean values when just given the property name", function () {
       var res = ps.searchForBoolean(testObj, 'index');
@@ -117,6 +140,22 @@ describe("prop-search", function () {
         { path: 'propD.more.things',
           value: { nested: false, something: true },
           key: 'things' }
+      ];
+
+      assert.equal(res.length, expected.length, 'incorrect number of results.');
+      assert.deepEqual(res, expected, 'incorrect results');
+    });
+
+    it('should work with arrays', function () {
+      var res = ps.searchForBoolean(testObj3, 'something');
+
+      var expected = [
+        { path: [ 'something', 'otherthing', 'something' ],
+          value: [
+            { something: true },
+            { other: false }
+          ],
+          key: 'something' }
       ];
 
       assert.equal(res.length, expected.length, 'incorrect number of results.');
@@ -193,6 +232,23 @@ describe("prop-search", function () {
       assert.equal(actual.length, expected.length, 'incorrect number of results.');
       assert.deepEqual(actual, expected, 'incorrect results');
     });
+
+    it('should work with arrays', function () {
+      var res = ps.searchForExistence(testObj3, 'other');
+
+      var expected = [
+        { path: [ 'something', 'otherthing', 'something' ],
+          value: [
+            { something: true },
+            { other: false }
+          ],
+          key: 'something'
+        }
+      ];
+
+      assert.equal(res.length, expected.length, 'incorrect number of results.');
+      assert.deepEqual(res, expected, 'incorrect results');
+    });
   });
 
   describe("searchForText", function () {
@@ -226,6 +282,20 @@ describe("prop-search", function () {
 
       assert.equal(actual.length, expected.length, 'incorrect number of results.');
       assert.deepEqual(actual, expected, 'incorrect results');
+    });
+
+    it('should work with arrays', function () {
+      var res = ps.searchForText(testObj4, 'val2');
+
+      var expected = [
+        { path: [ 'something', 'other', 'something' ],
+          value: [ 'val1', 'val2', 'val3' ],
+          key: 'something'
+        }
+      ];
+
+      assert.equal(res.length, expected.length, 'incorrect number of results.');
+      assert.deepEqual(res, expected, 'incorrect results');
     });
   });
 
