@@ -101,8 +101,10 @@ exports.searchForBoolean = function (obj, query, options, val) {
   }
 
   var testProp = function (obj, key) {
-    if (typeof key === 'string') {
-      return obj[key] === val;
+    if (obj) {
+      if (typeof key === 'string') {
+        return obj[key] === val;
+      }
     }
     return false;
   };
@@ -139,7 +141,14 @@ exports.searchForExistence = function (obj, query, options) {
 
   var testProp = function (obj, key) {
     if (typeof key === 'string') {
-      return obj[key] !== undefined;
+      if (obj) {
+        if (obj[key]) {
+          return true;
+        }
+        else if (typeof obj[key] === 'boolean') {
+          return true;
+        }
+      }
     }
     return false;
   };
@@ -176,7 +185,7 @@ exports.searchForText = function (obj, query, options) {
   }
 
   var testObj = function (obj, query) {
-    if (isPlainObject(obj)) {
+    if (obj && isPlainObject(obj)) {
       for (key in obj) {
         if (obj.hasOwnProperty(key)) {
           return obj[key] === query;
