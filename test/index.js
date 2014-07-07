@@ -75,21 +75,6 @@ describe("prop-search", function () {
     }
   };
 
-  var testObj4 = {
-    something: {
-      other: {
-        something: [ 'val1', 'val2', 'val3' ]
-      }
-    }
-  };
-
-  var testObj5 = {
-    something: {
-      other: {
-        something: [ 'val1', 11, 'val3' ]
-      }
-    }
-  };
 
   describe("searchForBoolean", function () {
     it("should find boolean values when just given the property name", function () {
@@ -263,6 +248,38 @@ describe("prop-search", function () {
       assert.equal(res.length, expected.length, 'incorrect number of results.');
       assert.deepEqual(res, expected, 'incorrect results');
     });
+
+    it('should work with arrays 2', function () {
+      var testObj6 = {
+        onething: {
+          twothing: {
+            arraything: [
+              {
+                something: true
+              },
+              {
+                other: false
+              }
+            ]
+          }
+        }
+      };
+
+      var expected = [
+        { path: [ 'onething', 'twothing', 'arraything' ],
+          value: [
+            { something: true },
+            { other: false }
+          ],
+          key: 'arraything'
+        }
+      ];
+
+      var actual = ps.searchForExistence(testObj6, 'something');
+
+      assert.equal(actual.length, expected.length, 'incorrect number of results.');
+      assert.deepEqual(actual, expected, 'incorrect results');
+    });
   });
 
   describe("searchForValue", function () {
@@ -313,6 +330,15 @@ describe("prop-search", function () {
     });
 
     it('should work with arrays and text', function () {
+      var testObj4 = {
+        something: {
+          other: {
+            something: [ 'val1', 'val2', 'val3' ]
+          }
+        }
+      };
+
+
       var res = ps.searchForValue(testObj4, 'val2');
 
       var expected = [
@@ -327,6 +353,14 @@ describe("prop-search", function () {
     });
 
     it('should work with arrays and number', function () {
+      var testObj5 = {
+        something: {
+          other: {
+            something: [ 'val1', 11, 'val3' ]
+          }
+        }
+      };
+
       var res = ps.searchForValue(testObj5, 11);
 
       var expected = [
