@@ -65,11 +65,14 @@ function joinPaths(res, options) {
  *
  * @api public
  * @param {Mixed} obj       input
- * @param {Function} test   test function
  * @param {Mixed} options   options
+ * @param {Function} test   test function
  * @returns {Array}
  */
 exports.search = function (obj, test, options) {
+  if (!options) {
+    options = {};
+  }
   return joinPaths(objectSearch(obj, test), options);
 };
 
@@ -78,24 +81,22 @@ exports.search = function (obj, test, options) {
  *
  * @api public
  * @param {Mixed} obj       input
- * @param {Mixed} options   <optional> options
  * @param {String|Array} query  The property key(s) to check.
  *                              It can be array, then searches for any one of the items in array.
+ * @param {Mixed} options   <optional> options
  * @param {Boolean} val     <optional> what boolean value to search for. default is true
  * @returns {Array}
  */
-exports.searchForBoolean = function (obj, options, query, val) {
-  if (val === undefined && query === undefined) {
+exports.searchForBoolean = function (obj, query, options, val) {
+  if (val === undefined && options === undefined) {
     val = true;
-    query = options;
     options = {};
   }
-  else if (val === undefined && typeof query === 'boolean') {
-    val = query;
-    query = options;
+  else if (val === undefined && typeof options === 'boolean') {
+    val = options;
     options = {}
   }
-  else {
+  else if (val === undefined) {
     val = true;
   }
 
@@ -127,13 +128,12 @@ exports.searchForBoolean = function (obj, options, query, val) {
  *
  * @api public
  * @param {Mixed} obj
+ * @param {String|Array} query
  * @param {Mixed} options   <optional> options
- * @param {String|Array}query
  * @returns {Array}
  */
-exports.searchForExistence = function (obj, options, query) {
-  if (!query) {
-    query = options;
+exports.searchForExistence = function (obj, query, options) {
+  if (!options) {
     options = {};
   }
 
@@ -167,12 +167,11 @@ exports.searchForExistence = function (obj, options, query) {
  * @api public
  * @param {Mixed} obj
  * @param {Mixed} options
- * @param <String|Array} query the text to match
+ * @param {String|Array} query the text to match
  * @returns {Array}
  */
-exports.searchForText = function (obj, options, query) {
-  if (!query) {
-    query = options;
+exports.searchForText = function (obj, query, options) {
+  if (!options) {
     options = {};
   }
 
