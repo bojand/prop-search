@@ -285,12 +285,9 @@ describe("prop-search", function () {
   describe("searchForValue", function () {
     it('should work with no option set', function () {
       var expected = [
-        { path: [ 'propF', 'moreNester' ],
-          value: { meant: 'tre', asdf: {
-            someval: true,
-            val1: 'good'
-          } },
-          key: 'moreNester' }
+        { path: [ 'propF', 'moreNester', 'meant' ],
+          value: 'tre',
+          key: 'meant' }
       ];
 
       var actual = ps.searchForValue(testObj, 'tre');
@@ -301,9 +298,9 @@ describe("prop-search", function () {
 
     it('should work with no option set with a number', function () {
       var expected = [
-        { path: [ 'propG', 'objB' ],
-          value: { someNumValue: 5 },
-          key: 'objB'
+        { path: [ 'propG', 'objB', 'someNumValue' ],
+          value: 5,
+          key: 'someNumValue'
         }
       ];
 
@@ -315,12 +312,9 @@ describe("prop-search", function () {
 
     it('should work with separator option set', function () {
       var expected = [
-        { path: 'propD.more',
-          value: { stuff: 'here', things: {
-            nested: false,
-            something: true
-          } },
-          key: 'more' }
+        { path: 'propD.more.stuff',
+          value: 'here',
+          key: 'stuff' }
       ];
 
       var actual = ps.searchForValue(testObj, 'here', {separator: '.' });

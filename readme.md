@@ -10,7 +10,7 @@ Simple property searches on your JavaScript objects.
 
 Helper module to search an object for properties and conditions, and returns the array of results.
 We can search for specific boolean values by key and optionally value. We can search for existence of keys, or perform
-a text search, and find results with the text value. Finally we can search using a test function.
+a numerical / text search, and find results with the value. Finally we can search using a test function.
 All functions returns an array of result objects, which have the format:
 
 ```js
@@ -190,9 +190,9 @@ var res = ps.searchForValue(obj, 'blah');
 ```
 `res`:
 ```js
-[ { path: [ 'prop', 'nested', 'stuff', 'something' ],
-    value: { other: 'blah' },
-    key: 'something' } ]
+[ { path: [ 'prop', 'nested', 'stuff', 'something', 'other' ],
+    value: 'blah',
+    key: 'other' } ]
 ```
 
 #### search(obj, test, options)

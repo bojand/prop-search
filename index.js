@@ -39,12 +39,6 @@ function objectSearch(obj, parent, test, path, ret) {
     if (parent && Array.isArray(parent)) {
       val = parent;
     }
-    else if (!isPlainObject(obj) && isPlainObject(parent)) {
-      // or primitive
-      val = parent;
-      p = p.slice(0, -1);
-      objkey = p[p.length - 1];
-    }
 
     ret.push({
       path: p,
@@ -53,16 +47,18 @@ function objectSearch(obj, parent, test, path, ret) {
     });
   }
 
-  for (var key in obj) {
-    if (obj.hasOwnProperty(key) && isPlainObject(obj[key])) {
-      var curr = obj[key];
-      if (Array.isArray(curr)) {
-        curr.forEach(function (elem) {
-          objectSearch(elem, curr, test, path.concat(key), ret)
-        });
-      }
-      else {
-        objectSearch(curr, curr, test, path.concat(key), ret)
+  if (isPlainObject(obj)) {
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        var curr = obj[key];
+        if (Array.isArray(curr)) {
+          curr.forEach(function (elem) {
+            objectSearch(elem, curr, test, path.concat(key), ret)
+          });
+        }
+        else {
+          objectSearch(curr, curr, test, path.concat(key), ret)
+        }
       }
     }
   }
@@ -220,13 +216,6 @@ exports.searchForValue = function (object, query, options) {
       }
       else if (typeof obj === 'string' || typeof obj === 'number') {
         return obj === query;
-      }
-      else {
-        for (var key in obj) {
-          if (obj.hasOwnProperty(key)) {
-            return obj[key] === query;
-          }
-        }
       }
     }
 
