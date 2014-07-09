@@ -160,6 +160,27 @@ describe("prop-search", function () {
       assert.equal(res.length, expected.length, 'incorrect number of results.');
       assert.deepEqual(res, expected, 'incorrect results');
     });
+
+    it('should work with function as properties', function () {
+      var testObj = {
+        propA: { type: String },
+        propB: String,
+        propC: {type: Object, ref: 'Blah'},
+        propD: {type: String, index: true}
+      };
+
+      var actual = ps.searchForBoolean(testObj, 'index', {separator: '.'});
+
+      var expected = [
+        { path: 'propD',
+          value: { type: Object, index: true},
+          key: 'propD' }
+      ];
+
+      assert.equal(actual.length, expected.length, 'incorrect number of results.');
+      assert.equal(actual[0].value.index, expected[0].value.index, 'incorrect results.');
+      assert.equal(actual[0].key, expected[0].key, 'incorrect results.');
+    });
   });
 
   describe("searchForExistence", function () {
@@ -226,6 +247,25 @@ describe("prop-search", function () {
         { path: 'propF.moreNester.asdf',
           value: { someval: true, val1: 'good' },
           key: 'asdf' }
+      ];
+
+      assert.equal(actual.length, expected.length, 'incorrect number of results.');
+      assert.deepEqual(actual, expected, 'incorrect results');
+    });
+
+    it('should work with function as properties', function () {
+      var testObj = {
+        propA: { type: String },
+        propB: String,
+        propC: {type: Object, ref: 'Blah'}
+      };
+
+      var actual = ps.searchForExistence(testObj, 'ref', {separator: '.'});
+
+      var expected = [
+        { path: 'propC',
+          value: { type: Object, ref: 'Blah'},
+          key: 'propC' }
       ];
 
       assert.equal(actual.length, expected.length, 'incorrect number of results.');
@@ -366,6 +406,26 @@ describe("prop-search", function () {
 
       assert.equal(res.length, expected.length, 'incorrect number of results.');
       assert.deepEqual(res, expected, 'incorrect results');
+    });
+
+    it('should work with function as properties', function () {
+      var testObj = {
+        propA: { type: String },
+        propB: String,
+        propC: {type: Object, ref: 'Blah'},
+        propD: {type: String, index: true}
+      };
+
+      var actual = ps.searchForValue(testObj, 'Blah', {separator: '.'});
+
+      var expected = [
+        { path: 'propC.ref',
+          value: 'Blah',
+          key: 'ref' }
+      ];
+
+      assert.equal(actual.length, expected.length, 'incorrect number of results.');
+      assert.deepEqual(actual, expected, 'incorrect results');
     });
   });
 

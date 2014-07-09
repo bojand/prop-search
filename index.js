@@ -11,6 +11,15 @@ function isPlainObject(input) {
 }
 
 /**
+ * Checks whether input is testable
+ * @param input
+ * @returns {boolean}
+ */
+function testable(input) {
+  return (input != null && input != undefined && typeof input != 'function');
+}
+
+/**
  * Recursively performs search on the given object on properties that pass the test function.
  * Test function accepts an object, and must return true or false.
  *
@@ -30,7 +39,7 @@ function objectSearch(obj, parent, test, path, ret) {
   if (!path) { path = [] }
   if (!ret) ret = [];
 
-  if (test(obj)) {
+  if (testable(obj) && test(obj)) {
     var p = path;
     var objkey = path[path.length - 1];
     var val = obj;
