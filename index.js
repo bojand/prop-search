@@ -30,7 +30,7 @@ function testable(input) {
  * @param {Array} ret       current results
  * @returns {Array}
  */
-function objectSearch(obj, parent, test, path, ret) {
+function objectSearch(obj, parent, test, path, ret, index) {
   if (typeof parent === 'function') {
     test = parent;
     parent = null;
@@ -45,15 +45,21 @@ function objectSearch(obj, parent, test, path, ret) {
     var val = obj;
 
     // in case it's an array
+    var resIndex;
     if (parent && Array.isArray(parent)) {
       val = parent;
+      resIndex = index;
     }
 
-    ret.push({
+    var res = {
       path: p,
       value: val,
       key: objkey
-    });
+    };
+
+    if (typeof resIndex === 'number') res.index = resIndex;
+
+    ret.push(res);
   }
 
   if (isPlainObject(obj)) {
@@ -61,8 +67,8 @@ function objectSearch(obj, parent, test, path, ret) {
       if (obj.hasOwnProperty(key)) {
         var curr = obj[key];
         if (Array.isArray(curr)) {
-          curr.forEach(function (elem) {
-            objectSearch(elem, curr, test, path.concat(key), ret)
+          curr.forEach(function (elem, index) {
+            objectSearch(elem, curr, test, path.concat(key), ret, index)
           });
         }
         else {

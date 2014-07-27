@@ -17,7 +17,8 @@ All functions returns an array of result objects, which have the format:
 {
   path: {Array},   // path to the result. ex. ['keys', 'to', 'result']
   value: {*},      // value of the result ex. { lookup : true }
-  key: {String}    // The key where result can be found
+  key: {String}    // The key where result can be found ex. 'someProp'
+  index: {Number}  // In case that the result is in an array, the index of the result element ex. 1
 }
 ```
 

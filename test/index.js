@@ -149,12 +149,15 @@ describe("prop-search", function () {
       var res = ps.searchForBoolean(testObj3, 'something');
 
       var expected = [
-        { path: [ 'something', 'otherthing', 'something' ],
+        {
+          path: [ 'something', 'otherthing', 'something' ],
           value: [
             { something: true },
             { other: false }
           ],
-          key: 'something' }
+          key: 'something',
+          index: 0
+        }
       ];
 
       assert.equal(res.length, expected.length, 'incorrect number of results.');
@@ -281,7 +284,8 @@ describe("prop-search", function () {
             { something: true },
             { other: false }
           ],
-          key: 'something'
+          key: 'something',
+          index: 1
         }
       ];
 
@@ -311,7 +315,8 @@ describe("prop-search", function () {
             { something: true },
             { other: false }
           ],
-          key: 'arraything'
+          key: 'arraything',
+          index: 0
         }
       ];
 
@@ -378,7 +383,8 @@ describe("prop-search", function () {
       var expected = [
         { path: [ 'something', 'other', 'something' ],
           value: [ 'val1', 'val2', 'val3' ],
-          key: 'something'
+          key: 'something',
+          index: 1
         }
       ];
 
@@ -400,7 +406,8 @@ describe("prop-search", function () {
       var expected = [
         { path: [ 'something', 'other', 'something' ],
           value: [ 'val1', 11, 'val3' ],
-          key: 'something'
+          key: 'something',
+          index: 1
         }
       ];
 
