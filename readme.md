@@ -71,12 +71,15 @@ var res = ps.searchForBoolean(thing, 'something');
 `res`:
 ```js
 [
-  { path: [ 'something', 'otherthing', 'something' ],
+  {
+    path: [ 'something', 'otherthing', 'something' ],
     value: [
       { something: true },
       { other: false }
     ],
-    key: 'something' }
+    key: 'something',
+    index: 0
+  }
 ]
 ```
 Or for example:
@@ -94,9 +97,11 @@ var res = ps.searchForValue(thing, 'val2');
 `res`:
 ```js
 [
-  { path: [ 'something', 'other', 'something' ],
+  {
+    path: [ 'something', 'other', 'something' ],
     value: [ 'val1', 'val2', 'val3' ],
-    key: 'something'
+    key: 'something',
+    index: 1
   }
 ]
 ```
