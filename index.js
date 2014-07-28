@@ -41,14 +41,12 @@ function objectSearch(obj, parent, test, path, ret, index) {
 
   if (testable(obj) && test(obj)) {
     var p = path;
-    var objkey = path[path.length - 1];
+    var objkey = typeof index === 'number' ? path[path.length - 2] : path[path.length - 1];
     var val = obj;
 
     // in case it's an array
-    var resIndex;
     if (parent && Array.isArray(parent)) {
       val = parent;
-      resIndex = index;
     }
 
     var res = {
@@ -56,8 +54,6 @@ function objectSearch(obj, parent, test, path, ret, index) {
       value: val,
       key: objkey
     };
-
-    if (typeof resIndex === 'number') res.index = resIndex;
 
     ret.push(res);
   }
@@ -68,7 +64,7 @@ function objectSearch(obj, parent, test, path, ret, index) {
         var curr = obj[key];
         if (Array.isArray(curr)) {
           curr.forEach(function (elem, index) {
-            objectSearch(elem, curr, test, path.concat(key), ret, index)
+            objectSearch(elem, curr, test, path.concat(key).concat(index), ret, index)
           });
         }
         else {

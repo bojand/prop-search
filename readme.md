@@ -18,11 +18,24 @@ All functions returns an array of result objects, which have the format:
   path: {Array},   // path to the result. ex. ['keys', 'to', 'result']
   value: {*},      // value of the result ex. { lookup : true }
   key: {String}    // The key where result can be found ex. 'someProp'
-  index: {Number}  // In case that the result is in an array, the index of the result element ex. 1
 }
 ```
 
+In case that any part of the path is an element in an array the index of that element will be in the path as a number.
+For example something like:
+
+```js
+['keys', 2, 'to', 'result']
+```
+or
+```js
+['keys', 'to', 'result', 1]
+```
+
 Optionally we can do `join` on the `path` array by passing options with a `separator` options specified.
+
+A good complementary module to this module is [mpath](https://www.npmjs.org/package/mpath) which can be used to
+retrieve the object at tha path.
 
 ```js
 var ps = require('prop-search');
@@ -72,13 +85,12 @@ var res = ps.searchForBoolean(thing, 'something');
 ```js
 [
   {
-    path: [ 'something', 'otherthing', 'something' ],
+    path: [ 'something', 'otherthing', 'something', 0 ],
     value: [
       { something: true },
       { other: false }
     ],
-    key: 'something',
-    index: 0
+    key: 'something'
   }
 ]
 ```
@@ -98,10 +110,9 @@ var res = ps.searchForValue(thing, 'val2');
 ```js
 [
   {
-    path: [ 'something', 'other', 'something' ],
+    path: [ 'something', 'other', 'something', 1 ],
     value: [ 'val1', 'val2', 'val3' ],
     key: 'something',
-    index: 1
   }
 ]
 ```

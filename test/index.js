@@ -75,6 +75,34 @@ describe("prop-search", function () {
     }
   };
 
+  var arrayTest = {
+    someArrayProp: [
+      {
+        rootPropA: {
+          propA: 'someValue',
+          propB: 10
+        },
+        rootPropB: 'dummy'
+      },
+      {
+        rootPropC: {
+          propC: true,
+          prodD: 'something'
+        },
+        rootPropF: 23
+      },
+      {
+
+        rootPropG: {
+          propA: 'anotherValue',
+          propF: false
+        },
+        rootPropH: 'yo'
+      }
+    ],
+    someOtherProp: 'something yo'
+  };
+
 
   describe("searchForBoolean", function () {
     it("should find boolean values when just given the property name", function () {
@@ -150,13 +178,12 @@ describe("prop-search", function () {
 
       var expected = [
         {
-          path: [ 'something', 'otherthing', 'something' ],
+          path: [ 'something', 'otherthing', 'something', 0 ],
           value: [
             { something: true },
             { other: false }
           ],
-          key: 'something',
-          index: 0
+          key: 'something'
         }
       ];
 
@@ -183,6 +210,24 @@ describe("prop-search", function () {
       assert.equal(actual.length, expected.length, 'incorrect number of results.');
       assert.equal(actual[0].value.index, expected[0].value.index, 'incorrect results.');
       assert.equal(actual[0].key, expected[0].key, 'incorrect results.');
+    });
+
+    it('should work with arrays 2', function () {
+      var res = ps.searchForBoolean(arrayTest, 'propC');
+
+      var expected = [
+        {
+          path: [ 'someArrayProp', 1, 'rootPropC' ],
+          value: {
+            propC: true,
+            prodD: 'something'
+          },
+          key: 'rootPropC'
+        }
+      ];
+
+      assert.equal(res.length, expected.length, 'incorrect number of results.');
+      assert.deepEqual(res, expected, 'incorrect results');
     });
   });
 
@@ -279,13 +324,12 @@ describe("prop-search", function () {
       var res = ps.searchForExistence(testObj3, 'other');
 
       var expected = [
-        { path: [ 'something', 'otherthing', 'something' ],
+        { path: [ 'something', 'otherthing', 'something', 1 ],
           value: [
             { something: true },
             { other: false }
           ],
-          key: 'something',
-          index: 1
+          key: 'something'
         }
       ];
 
@@ -310,13 +354,12 @@ describe("prop-search", function () {
       };
 
       var expected = [
-        { path: [ 'onething', 'twothing', 'arraything' ],
+        { path: [ 'onething', 'twothing', 'arraything', 0 ],
           value: [
             { something: true },
             { other: false }
           ],
-          key: 'arraything',
-          index: 0
+          key: 'arraything'
         }
       ];
 
@@ -324,6 +367,32 @@ describe("prop-search", function () {
 
       assert.equal(actual.length, expected.length, 'incorrect number of results.');
       assert.deepEqual(actual, expected, 'incorrect results');
+    });
+
+    it('should work with arrays 3', function () {
+      var res = ps.searchForExistence(arrayTest, 'propA', {separator: '.'});
+
+      var expected = [
+        {
+          path: 'someArrayProp.0.rootPropA',
+          value: {
+            propA: 'someValue',
+            propB: 10
+          },
+          key: 'rootPropA'
+        },
+        {
+          path: 'someArrayProp.2.rootPropG',
+          value: {
+            propA: 'anotherValue',
+            propF: false
+          },
+          key: 'rootPropG'
+        }
+      ];
+
+      assert.equal(res.length, expected.length, 'incorrect number of results.');
+      assert.deepEqual(res, expected, 'incorrect results');
     });
   });
 
@@ -381,10 +450,9 @@ describe("prop-search", function () {
       var res = ps.searchForValue(testObj4, 'val2');
 
       var expected = [
-        { path: [ 'something', 'other', 'something' ],
+        { path: [ 'something', 'other', 'something', 1 ],
           value: [ 'val1', 'val2', 'val3' ],
-          key: 'something',
-          index: 1
+          key: 'something'
         }
       ];
 
@@ -404,10 +472,9 @@ describe("prop-search", function () {
       var res = ps.searchForValue(testObj5, 11);
 
       var expected = [
-        { path: [ 'something', 'other', 'something' ],
+        { path: [ 'something', 'other', 'something', 1 ],
           value: [ 'val1', 11, 'val3' ],
-          key: 'something',
-          index: 1
+          key: 'something'
         }
       ];
 
